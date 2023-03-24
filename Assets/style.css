@@ -3,7 +3,10 @@ header {
     color: white;
     text-align: center;
 }
-
+h1{
+    font-weight: bold;
+    color:rgb(73, 146, 255);
+}
 main {
     display: flex;
 }
@@ -24,7 +27,7 @@ input {
     font-size: 20px;
     width: 88%;
 }
-button {
+button#search-button {
     display: block;
     margin-top: 10px;
     width: 90%;
@@ -35,7 +38,7 @@ button {
     box-shadow: 2px 2px 5px 2px rgba(90, 90, 90, 0.5);
 }
 
-button:hover {
+button#search-button:hover {
     background-color: rgb(133, 179, 248);
     box-shadow: 2px 2px 5px 2px rgba(36, 36, 36, 0.5);
 }

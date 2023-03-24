@@ -1,10 +1,106 @@
 const cityInput = document.querySelector('input');
-var city = cityInput.value;
-const cityUrl = 'http://api.openweathermap.org/geo/1.0/direct?q=' +city +'&limit=5&appid=bae2cbfa4fdf07dcf4575ab5ebd73910'
-fetch(cityUrl)
-    .then(response => response.json())
-    .then(data => {
+const searchBtn = document.querySelector('#search-button');
+const todayWeather = document.querySelector('.today');
+const in5Days = document.querySelector('.weather-in-5-days')
 
-        console.log(data)
-    })
+
+function TempInF(kelvin) {
+    const fahrenheit = (kelvin - 273.15) * 1.8 + 32;
+    return fahrenheit;
+  }
+
+// function give the day in format MM/DD(+x)/YYYY, x is the days of the future
+var theDate = (x) => {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const day = today.getDate() + x ;
+    const year = today.getFullYear(); 
+    return (month + "/" + day + "/" + year);
+}
+
+function todayOutput(todayData) {
+    var todayDate = document.createElement("h1");
+    var city = cityInput.value;
+    todayDate.textContent = city + " " +  theDate(0);
+    todayWeather.append(todayDate);
+
+    var todayTempOutput = document.createElement("p");
+    todayTempOutput.textContent = "Temp: " + Math.round(TempInF(todayData.temp)) + " °F";
+    todayWeather.append(todayTempOutput);
+
+
+    var todayWindOutput = document.createElement("p");
+    todayWindOutput.textContent = "Wind: " + todayData.wind + " MPS";
+    todayWeather.append(todayWindOutput);
+
+    var todayHumOutput = document.createElement("p");
+    todayHumOutput.textContent = "Humidity: " + todayData.wind +" %";
+    todayWeather.append(todayHumOutput);
+}
+
+function fiveDaysOutput(day) {
+    for
+}
+searchBtn.addEventListener('click', () => {
+    var city = cityInput.value;
+  
+    // Get weather data for today
+    var cityUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' + city +'&appid=bae2cbfa4fdf07dcf4575ab5ebd73910'
+    fetch(cityUrl)
+        .then(response => response.json())
+        .then(data => todayData = {
+            temp: data.main.temp,
+            wind: data.wind.speed,
+            hum: data.main.humidity,
+            
+        })
+        .then(() => {
+            todayOutput(todayData);
+
+        })
+
     
+    var weatherUrl = 'http://api.openweathermap.org/data/2.5/forecast?q=' + city + '&appid=bae2cbfa4fdf07dcf4575ab5ebd73910'
+    
+    //get data weather for 5 days
+    
+    
+    fetch(weatherUrl)
+        .then(response => response.json())
+        .then(data => day = [
+            {
+                temperature: data.list[3].main.temp,
+                windSpeed: data.list[3].wind.speed,
+                hum: data.list[3].main.humidity,
+            },
+            {
+                temperature: data.list[11].main.temp,
+                windSpeed: data.list[11].wind.speed,
+                hum: data.list[11].main.humidity,
+            },
+            {
+                temperature: data.list[19].main.temp,
+                windSpeed: data.list[19].wind.speed,
+                hum: data.list[19].main.humidity,
+            },
+            {
+                temperature: data.list[27].main.temp,
+                windSpeed: data.list[27].wind.speed,
+                hum: data.list[27].main.humidity,
+            },
+            {
+                temperature: data.list[35].main.temp,
+                windSpeed: data.list[35].wind.speed,
+                hum: data.list[35].main.humidity,
+            },
+            
+        ])
+
+   
+
+
+
+
+   
+
+})
