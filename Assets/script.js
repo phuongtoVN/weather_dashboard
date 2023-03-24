@@ -39,7 +39,28 @@ function todayOutput(todayData) {
 }
 
 function fiveDaysOutput(day) {
-    for
+    day.forEach(function(each, index) {
+        console.log( each);
+        var dayth = document.createElement("div");
+        var dateTh = document.createElement("h3");
+        dateTh.textContent = theDate(index+1);
+        dayth.append(dateTh);
+    
+        var dayTempOutput = document.createElement("p");
+        dayTempOutput.textContent = "Temp: " + Math.round(TempInF(each.temp)) + " °F";
+        dayth.append(dayTempOutput);
+    
+    
+        var dayWindOutput = document.createElement("p");
+        dayWindOutput.textContent = "Wind: " + each.wind + " MPS";
+        dayth.append(dayWindOutput);
+    
+        var dayHumOutput = document.createElement("p");
+        dayHumOutput.textContent = "Humidity: " + each.wind +" %";
+        dayth.append(dayHumOutput);
+
+        in5Days.append(dayth);
+    })
 }
 searchBtn.addEventListener('click', () => {
     var city = cityInput.value;
@@ -69,32 +90,35 @@ searchBtn.addEventListener('click', () => {
         .then(response => response.json())
         .then(data => day = [
             {
-                temperature: data.list[3].main.temp,
-                windSpeed: data.list[3].wind.speed,
+                temp: data.list[3].main.temp,
+                wind: data.list[3].wind.speed,
                 hum: data.list[3].main.humidity,
             },
             {
-                temperature: data.list[11].main.temp,
-                windSpeed: data.list[11].wind.speed,
+                temp: data.list[11].main.temp,
+                wind: data.list[11].wind.speed,
                 hum: data.list[11].main.humidity,
             },
             {
-                temperature: data.list[19].main.temp,
-                windSpeed: data.list[19].wind.speed,
+                temp: data.list[19].main.temp,
+                wind: data.list[19].wind.speed,
                 hum: data.list[19].main.humidity,
             },
             {
-                temperature: data.list[27].main.temp,
-                windSpeed: data.list[27].wind.speed,
+                temp: data.list[27].main.temp,
+                wind: data.list[27].wind.speed,
                 hum: data.list[27].main.humidity,
             },
             {
-                temperature: data.list[35].main.temp,
-                windSpeed: data.list[35].wind.speed,
+                temp: data.list[35].main.temp,
+                wind: data.list[35].wind.speed,
                 hum: data.list[35].main.humidity,
             },
             
         ])
+        .then (() => {
+            fiveDaysOutput(day);
+        })
 
    
 
