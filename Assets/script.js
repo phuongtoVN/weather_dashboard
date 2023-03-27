@@ -41,7 +41,6 @@ function todayOutput(todayData) {
 
 function fiveDaysOutput(day) {
     day.forEach(function(each, index) {
-        console.log( each);
         var dayth = document.createElement("div");
         var dateTh = document.createElement("h3");
         dateTh.textContent = theDate(index+1);
@@ -70,10 +69,8 @@ function removeResult() {
     todayWeather.innerHTML = "";
 }
 
-searchBtn.addEventListener('click', () => {
-    var city = cityInput.value;
-    if (cities.length > 0) removeResult();
-    
+/* weather data today from API */
+function getTodayWeather(city) {
     // Get weather data for today
     var cityUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' + city +'&appid=bae2cbfa4fdf07dcf4575ab5ebd73910'
     fetch(cityUrl)
@@ -89,12 +86,13 @@ searchBtn.addEventListener('click', () => {
 
         })
 
-    
+
+}
+
+/* get weather data for 5 days */
+function get5DaysData(city) {
     var weatherUrl = 'http://api.openweathermap.org/data/2.5/forecast?q=' + city + '&appid=bae2cbfa4fdf07dcf4575ab5ebd73910'
-    
-    //get data weather for 5 days
-    
-    
+ 
     fetch(weatherUrl)
         .then(response => response.json())
         .then(data => day = [
@@ -129,6 +127,12 @@ searchBtn.addEventListener('click', () => {
             fiveDaysOutput(day);
         })
 
+}
+searchBtn.addEventListener('click', () => {
+    var city = cityInput.value;
+    if (cities.length > 0) removeResult();
+    getTodayWeather(city);
+    get5DaysData(city);
     /* Save input in local storage */
 
     localStorage.setItem(key, city);
@@ -160,3 +164,21 @@ function addCityToHistory() {
     newCity.textContent = city;
     historySearch.insertBefore(newCity,cities[0]);
 }
+
+
+
+/* add event listener to the city btn */
+const cityButton = document.querySelector(".city-btn");
+
+document.addEventListener('DOMContentLoaded', () => {
+    
+    if (cityButton) {
+        cityButton.addEventListener('click',() => {
+            var city = cityButton.textContent;
+            getTodayWeather(city);
+            get5DaysData(city);
+        })
+    }
+    else console.log(cityButton);
+    
+})
