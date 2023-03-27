@@ -73,6 +73,7 @@ function removeResult() {
 searchBtn.addEventListener('click', () => {
     var city = cityInput.value;
     if (cities.length > 0) removeResult();
+    
     // Get weather data for today
     var cityUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' + city +'&appid=bae2cbfa4fdf07dcf4575ab5ebd73910'
     fetch(cityUrl)
