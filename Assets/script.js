@@ -170,19 +170,17 @@ function addCityToHistory() {
 /* add event listener to the city btn */
 const cityButton = document.querySelector(".city-btn");
 
-
-window.onload = function() {
+document.addEventListener('DOMContentLoaded', () => {
     
     setTimeout(function() {
-       
+        if (cityButton) {
             cityButton.addEventListener('click',() => {
                 var city = cityButton.textContent;
                 getTodayWeather(city);
                 get5DaysData(city);
             })
-       
-    
+        }
     }, 1000);
     
     
-}
+});
