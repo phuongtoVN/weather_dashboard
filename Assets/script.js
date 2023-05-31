@@ -1,9 +1,10 @@
 const cityInput = document.querySelector('input');
 const searchBtn = document.querySelector('#search-button');
 const todayWeather = document.querySelector('.today');
-const in5Days = document.querySelector('.weather-in-5-days')
-
-
+const in5Days = document.querySelector('.weather-in-5-days');
+const historySearch = document.querySelector('.history');
+const cities = historySearch.children;
+var key = "inputValue";
 function TempInF(kelvin) {
     const fahrenheit = (kelvin - 273.15) * 1.8 + 32;
     return fahrenheit;
@@ -40,7 +41,6 @@ function todayOutput(todayData) {
 
 function fiveDaysOutput(day) {
     day.forEach(function(each, index) {
-        console.log( each);
         var dayth = document.createElement("div");
         var dateTh = document.createElement("h3");
         dateTh.textContent = theDate(index+1);
@@ -58,13 +58,19 @@ function fiveDaysOutput(day) {
         var dayHumOutput = document.createElement("p");
         dayHumOutput.textContent = "Humidity: " + each.wind +" %";
         dayth.append(dayHumOutput);
-
+        dayth.classList.add('card');
         in5Days.append(dayth);
     })
 }
-searchBtn.addEventListener('click', () => {
-    var city = cityInput.value;
-  
+
+/* function to remove previous search */
+function removeResult() {
+    in5Days.innerHTML = "";
+    todayWeather.innerHTML = "";
+}
+
+/* weather data today from API */
+function getTodayWeather(city) {
     // Get weather data for today
     var cityUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' + city +'&appid=bae2cbfa4fdf07dcf4575ab5ebd73910'
     fetch(cityUrl)
@@ -80,12 +86,13 @@ searchBtn.addEventListener('click', () => {
 
         })
 
-    
+
+}
+
+/* get weather data for 5 days */
+function get5DaysData(city) {
     var weatherUrl = 'http://api.openweathermap.org/data/2.5/forecast?q=' + city + '&appid=bae2cbfa4fdf07dcf4575ab5ebd73910'
-    
-    //get data weather for 5 days
-    
-    
+ 
     fetch(weatherUrl)
         .then(response => response.json())
         .then(data => day = [
@@ -120,11 +127,62 @@ searchBtn.addEventListener('click', () => {
             fiveDaysOutput(day);
         })
 
-   
+}
+searchBtn.addEventListener('click', () => {
+    var city = cityInput.value;
+    if (cities.length > 0) removeResult();
+    getTodayWeather(city);
+    get5DaysData(city);
+    /* Save input in local storage */
+
+    localStorage.setItem(key, city);
+    
+    //if the city from the input already exist in the history, we don't have to save it
+    
+    var found = false;
+    if (cities.length === 0) {
+        addCityToHistory();
+    }
+    else {
+        for (var i = 0; i < cities.length; i++) {
+            console.log(city, cities[i]);
+            if (city === cities[i].textContent) {
+                found = true;
+                break; 
+            }
+        };
+        if (!found) {addCityToHistory()}
+    }
+    
+
+});
+
+function addCityToHistory() {
+    var city = cityInput.value;
+    var newCity = document.createElement("button");
+    newCity.setAttribute("class", "city-btn");
+    newCity.textContent = city;
+    historySearch.insertBefore(newCity,cities[0]);
+}
 
 
 
+/* add event listener to the city btn */
+const cityButton = document.querySelector(".city-btn");
 
-   
 
-})
+window.onload = function() {
+    
+    setTimeout(function() {
+       
+            cityButton.addEventListener('click',() => {
+                var city = cityButton.textContent;
+                getTodayWeather(city);
+                get5DaysData(city);
+            })
+       
+    
+    }, 1000);
+    
+    
+}
